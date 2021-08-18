@@ -9,7 +9,8 @@ ROS.Publisher = function(topic, msg_type, latched=false) {
 ////////////////////////////////
 // BEGIN Python implementation
 	var impl = `
-import rospy
+import rclpy
+from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 import sys
 import importlib
 import json
@@ -22,14 +23,17 @@ msg_pkg = msg_def[0]
 msg_name = msg_def[1]
 latched = sys.argv[3] == "`+LATCHED+`" if len(sys.argv) > 3 else False
 
-rospy.init_node('flexbe_app_pub_%s' % topic.replace('/', '_'))
+context = rclpy.context.Context()
+rclpy.init(context=context)
+executor = MultiThreadedExecutor(context=context)
+node = rclpy.create_node('flexbe_app_pub_%s' % topic.replace('/', '_'), context=context)
 
 msg_module = importlib.import_module('%s.msg' % msg_pkg)
 msg_class = getattr(msg_module, msg_name)
 
-pub = rospy.Publisher(topic, msg_class, queue_size=10, latch=latched)
+pub = node.create_publisher(msg_class, topic, 10)
 
-while not rospy.is_shutdown():
+while rclpy.ok():
 	json_str = sys.stdin.readline()
 	try:
 		msg_dict = json.loads(json_str)

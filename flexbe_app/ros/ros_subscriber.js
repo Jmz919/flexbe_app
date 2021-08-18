@@ -7,7 +7,8 @@ ROS.Subscriber = function(topic, msg_type, callback) {
 ////////////////////////////////
 // BEGIN Python implementation
 	var impl = `
-import rospy
+import rclpy
+from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 import sys
 import importlib
 import json
@@ -23,14 +24,14 @@ msg_def = sys.argv[2].split('/')
 msg_pkg = msg_def[0]
 msg_name = msg_def[1]
 
-rospy.init_node('flexbe_app_sub_%s' % topic.replace('/', '_'))
+node = rclpy.create_node('flexbe_app_sub_%s' % topic.replace('/', '_'), context=context)
 
 msg_module = importlib.import_module('%s.msg' % msg_pkg)
 msg_class = getattr(msg_module, msg_name)
 
-sub = rospy.Subscriber(topic, msg_class, callback)
+sub = node.create_subscription(msg_class, topic, callback, 10)
 
-rospy.spin()
+rclpy.spin(node, executor=executor)
 	`;
 // END Python implementation
 //////////////////////////////

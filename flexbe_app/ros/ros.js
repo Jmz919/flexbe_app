@@ -9,20 +9,24 @@ ROS = new (function() {
 ////////////////////////////////
 // BEGIN Python implementation
 	var init_impl = `
-import rospy
+import rclpy
+from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 import sys
 
-rospy.init_node('flexbe_app')
+context = rclpy.context.Context()
+rclpy.init(context=context)
+executor = MultiThreadedExecutor(context=context)
+node = rclpy.create_node('flexbe_app', context=context)
 
 sys.stdout.flush()
 sys.stdout.write(':'+rospy.get_namespace()+':connected')
 sys.stdout.flush()
 
-rospy.spin()
+rclpy.spin(node, executor=executor)
 	`;
 // END Python implementation
 //////////////////////////////
-	
+
 	var ros_proc = undefined;
 
 	that.init = function(callback) {
@@ -51,12 +55,12 @@ rospy.spin()
 	var package_cache = undefined;
 	that.getPackageList = function(callback) {
 		if (package_cache == undefined) {
-			var proc = spawn('rospack', ['list']);
+			var proc = spawn('ros2pkg', ['list']);
 
 			var pkg_data = '';
 			proc.stdout.on('data', data => {
 				pkg_data += data;
-				
+
 			});
 			proc.on('close', (code) => {
 				package_cache = pkg_data.split(os.EOL);
