@@ -33,6 +33,7 @@ add_custom_target(nw_install DEPENDS nwjs)
 INSTALL(PROGRAMS
     bin/run_app
     bin/shortcut
+    bin/nwjs_install
     DESTINATION lib/${PROJECT_NAME}
 )
 INSTALL(FILES
@@ -56,4 +57,5 @@ INSTALL(DIRECTORY
 #    DESTINATION lib/${PROJECT_NAME}
 #    USE_SOURCE_PERMISSIONS
 #)
+
 ament_package()

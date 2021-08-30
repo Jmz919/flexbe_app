@@ -50,10 +50,8 @@ msg_pkg = msg_def[0]
 msg_action_name = msg_def[1] + 'Action'
 msg_goal_name = msg_def[1] + 'Goal'
 
-context = rclpy.context.Context()
-rclpy.init(context=context)
-executor = MultiThreadedExecutor(context=context)
-node = rclpy.create_node('flexbe_app_act_%s' % topic.replace('/', '_'), context=context)
+rclpy.init()
+node = rclpy.create_node('flexbe_app_act_%s' % topic.replace('/', '_'))
 
 msg_module = importlib.import_module('%s.msg' % msg_pkg)
 msg_action_class = getattr(msg_module, msg_action_name)

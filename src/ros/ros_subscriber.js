@@ -24,7 +24,8 @@ msg_def = sys.argv[2].split('/')
 msg_pkg = msg_def[0]
 msg_name = msg_def[1]
 
-node = rclpy.create_node('flexbe_app_sub_%s' % topic.replace('/', '_'), context=context)
+rclpy.init()
+node = rclpy.create_node('flexbe_app_sub_%s' % topic.replace('/', '_'))
 
 msg_module = importlib.import_module('%s.msg' % msg_pkg)
 msg_class = getattr(msg_module, msg_name)

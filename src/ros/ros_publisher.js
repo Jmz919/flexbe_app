@@ -23,10 +23,8 @@ msg_pkg = msg_def[0]
 msg_name = msg_def[1]
 latched = sys.argv[3] == "`+LATCHED+`" if len(sys.argv) > 3 else False
 
-context = rclpy.context.Context()
-rclpy.init(context=context)
-executor = MultiThreadedExecutor(context=context)
-node = rclpy.create_node('flexbe_app_pub_%s' % topic.replace('/', '_'), context=context)
+rclpy.init()
+node = rclpy.create_node('flexbe_app_pub_%s' % topic.replace('/', '_'))
 
 msg_module = importlib.import_module('%s.msg' % msg_pkg)
 msg_class = getattr(msg_module, msg_name)

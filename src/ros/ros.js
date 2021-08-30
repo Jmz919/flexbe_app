@@ -13,10 +13,8 @@ import rclpy
 from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 import sys
 
-context = rclpy.context.Context()
-rclpy.init(context=context)
-executor = MultiThreadedExecutor(context=context)
-node = rclpy.create_node('flexbe_app', context=context)
+rclpy.init()
+node = rclpy.create_node('flexbe_app')
 
 sys.stdout.flush()
 sys.stdout.write(':'+rospy.get_namespace()+':connected')
