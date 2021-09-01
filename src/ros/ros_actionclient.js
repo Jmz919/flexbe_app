@@ -15,7 +15,6 @@ ROS.ActionClient = function(topic, action_type) {
 // BEGIN Python implementation
 	var impl = `
 import rclpy
-from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 from rclpy.action import ActionClient
 import sys
 import importlib

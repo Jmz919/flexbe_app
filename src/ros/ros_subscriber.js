@@ -8,7 +8,6 @@ ROS.Subscriber = function(topic, msg_type, callback) {
 // BEGIN Python implementation
 	var impl = `
 import rclpy
-from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 import sys
 import importlib
 import json
@@ -32,7 +31,7 @@ msg_class = getattr(msg_module, msg_name)
 
 sub = node.create_subscription(msg_class, topic, callback, 10)
 
-rclpy.spin(node, executor=executor)
+rclpy.spin(node)
 	`;
 // END Python implementation
 //////////////////////////////

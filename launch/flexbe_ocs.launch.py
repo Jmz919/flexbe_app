@@ -23,7 +23,6 @@ flexbe_app = Node(name="flexbe_app", package="flexbe_app", executable="run_app",
 
 behavior_launcher = Node(name="behavior_launcher", package="flexbe_widget", executable="be_launcher", output="screen")
 
-
 def generate_launch_description():
     return LaunchDescription([
             offline,

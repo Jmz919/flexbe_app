@@ -10,7 +10,6 @@ ROS.Publisher = function(topic, msg_type, latched=false) {
 // BEGIN Python implementation
 	var impl = `
 import rclpy
-from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 import sys
 import importlib
 import json

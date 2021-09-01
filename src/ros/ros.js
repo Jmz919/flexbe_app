@@ -10,17 +10,16 @@ ROS = new (function() {
 // BEGIN Python implementation
 	var init_impl = `
 import rclpy
-from rclpy.executors import MultiThreadedExecutor, SingleThreadedExecutor
 import sys
 
 rclpy.init()
 node = rclpy.create_node('flexbe_app')
 
 sys.stdout.flush()
-sys.stdout.write(':'+rospy.get_namespace()+':connected')
+sys.stdout.write(':'+node.get_namespace()+':connected')
 sys.stdout.flush()
 
-rclpy.spin(node, executor=executor)
+rclpy.spin(node)
 	`;
 // END Python implementation
 //////////////////////////////
