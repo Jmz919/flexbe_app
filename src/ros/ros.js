@@ -52,12 +52,11 @@ rclpy.spin(node)
 	var package_cache = undefined;
 	that.getPackageList = function(callback) {
 		if (package_cache == undefined) {
-			var proc = spawn('ros2pkg', ['list']);
+			var proc = spawn('ros2 pkg', ['list']);
 
 			var pkg_data = '';
 			proc.stdout.on('data', data => {
 				pkg_data += data;
-
 			});
 			proc.on('close', (code) => {
 				package_cache = pkg_data.split(os.EOL);
@@ -132,16 +131,16 @@ rclpy.spin(node)
 		});
 	}
 
-	// that.getParam = function(name, callback) {
-	// 	var proc = spawn('rosparam', ['get', name]);
-	// 	proc.stdout.on('data', data => {
-	// 		proc.kill('SIGKILL');
-	// 		if (String(data).startsWith('ERROR')) {
-	// 			callback(undefined);
-	// 		} else {
-	// 			callback(JSON.parse(data));
-	// 		}
-	// 	});
-	// }
+	that.getParam = function(name, callback) {
+		var proc = spawn('ros2 param', ['get', name]);
+		proc.stdout.on('data', data => {
+			proc.kill('SIGKILL');
+			if (String(data).startsWith('ERROR')) {
+				callback(undefined);
+			} else {
+				callback(JSON.parse(data));
+			}
+		});
+	}
 
 }) ();

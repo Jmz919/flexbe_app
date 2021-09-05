@@ -47,8 +47,7 @@ def main():
               test_function.__name__ = function_name
               setattr(TestReport, function_name, test_function)
 
-  import rosunit
-  rosunit.unitrun("flexbe_app", "test_report", TestReport)
+  unittest.main()
 
 
 if __name__ == '__main__':

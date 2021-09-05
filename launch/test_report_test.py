@@ -10,18 +10,20 @@ import pytest
 from ament_index_python.packages import get_package_share_directory
 
 @pytest.mark.rostest
-def generate_test_description():
-
+def generate_launch_description():
     flexbe_app_dir = get_package_share_directory('flexbe_app')
-    TEST_PROC_PATH = os.path.join(flexbe_app_dir, 'bin/test_report')
+    TEST_PROC_PATH = os.path.join(flexbe_app_dir, 'test_report')
 
     # This is necessary to get unbuffered output from the process under test
     proc_env = os.environ.copy()
     proc_env['PYTHONUNBUFFERED'] = '1'
 
-    test_core = launch.actions.ExecuteProcess(
+    test_report = launch.actions.ExecuteProcess(
         cmd=[sys.executable, TEST_PROC_PATH],
-        env=proc_env, output='screen'
+        env=proc_env,
+        output='screen',
+        sigterm_timeout=launch.substitutions.LaunchConfiguration('sigterm_timeout', default=90),
+        sigkill_timeout=launch.substitutions.LaunchConfiguration('sigkill_timeout', default=90)
     )
 
     return (

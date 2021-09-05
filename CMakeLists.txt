@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.5)
 project(flexbe_app)
 
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
@@ -34,10 +36,15 @@ INSTALL(PROGRAMS
     bin/run_app
     bin/shortcut
     bin/nwjs_install
+    bin/test_report
     DESTINATION lib/${PROJECT_NAME}
 )
 INSTALL(FILES
     package.json
+    DESTINATION lib/${PROJECT_NAME}
+)
+INSTALL(FILES
+    flexbe.desktop
     DESTINATION lib/${PROJECT_NAME}
 )
 INSTALL(DIRECTORY

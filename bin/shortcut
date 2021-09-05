@@ -22,7 +22,7 @@ else
 	echo ""
 	echo "  create - Creates the new launcher shortcut"
 	echo "           (optional) In case you do not source a setup.bash in your .bashrc, you can specify one for the shortcut, e.g.:"
-	echo "                      > rosrun flexbe_app shortcut create \"source ~/catkin_ws/devel/setup.bash\""
+	echo "                      > ros2 run flexbe_app shortcut create \"source ~/ros2_ws/install/setup.bash\""
 	echo ""
 	echo "  remove - Removes the launcher shortcut"
 fi
