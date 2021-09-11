@@ -3,7 +3,8 @@ ROS = new (function() {
 
 	var os = require('os');
 	var sys = require('sys');
-	var spawn = require('child_process').spawn;
+	var {spawn, exec, execSync} = require('child_process')
+	// var spawn = require('child_process').spawn;
 	var python = 'python' + (process.env.ROS_PYTHON_VERSION != undefined? process.env.ROS_PYTHON_VERSION : '');
 
 ////////////////////////////////
@@ -41,6 +42,15 @@ rclpy.spin(node)
 			ros_proc.kill('SIGKILL');
 			callback(undefined);
 		});
+
+		ros_proc = exec(python + " -c " + init_impl, function(err, stdout, stderr) {
+		  if (err || stderr) {
+				T.logError("ROS connection error: "+data);
+				ros_proc.kill('SIGKILL');
+				callback(undefined);
+		  }
+		  console.log(stdout);
+		});
 	}
 
 	that.shutdown = function() {
@@ -52,24 +62,29 @@ rclpy.spin(node)
 	var package_cache = undefined;
 	that.getPackageList = function(callback) {
 		if (package_cache == undefined) {
-			var proc = spawn('ros2 pkg', ['list']);
+			let packages = [];
+			var proc = spawn('ros2', ['pkg', 'list']);
 
 			var pkg_data = '';
 			proc.stdout.on('data', data => {
 				pkg_data += data;
 			});
+
 			proc.on('close', (code) => {
 				package_cache = pkg_data.split(os.EOL);
 				if (package_cache.length > 0) package_cache = package_cache.slice(0,-1);
 				for (var i=0; i<package_cache.length; i++) {
-					package_cache[i] = package_cache[i].split(" ");
-					package_cache[i] = {
-						'name': package_cache[i][0],
-						'path': package_cache[i][1],
-						'python_path': undefined
+					const path = execSync('ros2 pkg prefix ' + package_cache[i], { encoding: 'utf-8' }).trim();
+					if (path != '/opt/ros/foxy') {
+						package = {
+							'name': package_cache[i],
+							'path': path,
+							'python_path': undefined
+						}
+						packages.push(package)
 					}
 				}
-				callback(package_cache.clone());
+				callback(packages.clone());
 			});
 		} else {
 			process.nextTick(() => {
@@ -79,6 +94,7 @@ rclpy.spin(node)
 	}
 
 	that.getPackagePath = function(package_name, callback) {
+		T.logInfo("Getting package path");
 		that.getPackageList((package_cache) => {
 			var package_path = undefined;
 			for (var i=0; i<package_cache.length; i++) {
@@ -92,6 +108,7 @@ rclpy.spin(node)
 	}
 
 	that.getPackagePythonPath = function(package_name, callback) {
+		T.logInfo("Getting python package path");
 		var python_path = undefined;
 		that.getPackageList((package_cache) => {
 			for (var i=0; i<package_cache.length; i++) {
@@ -132,7 +149,8 @@ rclpy.spin(node)
 	}
 
 	that.getParam = function(name, callback) {
-		var proc = spawn('ros2 param', ['get', name]);
+		T.logInfo("Getting parameter");
+		var proc = spawn('ros2', ['param', 'get', name]);
 		proc.stdout.on('data', data => {
 			proc.kill('SIGKILL');
 			if (String(data).startsWith('ERROR')) {

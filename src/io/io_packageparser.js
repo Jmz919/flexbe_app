@@ -3,6 +3,8 @@ IO.PackageParser = new (function() {
 
 	var fs = require('fs');
 	var path = require('path');
+	var { exec } = require('child_process')
+
 
 	var dom_parser = new DOMParser();
 	var watched_states = {};
@@ -26,11 +28,12 @@ IO.PackageParser = new (function() {
 			pkg_cache = pkg_cache.concat(pkg_list);
 
 			var processEntry = function(idx) {
+				T.logInfo(pkg_list[idx]);
 				var entry = pkg_list[idx];
 				if (idx >= pkg_count) {
 					callback(pkg_cache, add_states, add_behaviors);
 				} else {
-					checkForRelevance(entry['path'], (has_states, has_behaviors) => {
+					checkForRelevance(entry['path'], entry['name'], (has_states, has_behaviors) => {
 						if (has_states || has_behaviors) {
 							var add_package = function(python_path) {
 								if (python_path != undefined) {
@@ -62,9 +65,9 @@ IO.PackageParser = new (function() {
 		}
 	}
 
-	var checkForRelevance = function(pkg_path, callback) {
-		var package_xml_path = path.join(pkg_path, 'package.xml');
-		
+	var checkForRelevance = function(pkg_path, pkg_name, callback) {
+		var package_xml_path = path.join(pkg_path, 'share', pkg_name, 'package.xml');
+
 		try {
 			if (fs.existsSync(package_xml_path)) {
 				var data = fs.readFileSync(package_xml_path);
@@ -107,7 +110,7 @@ IO.PackageParser = new (function() {
 								});
 								update_states.forEach(function (state) {
 									state.updateStateDefinition(state_def);
-									if (state.getContainer() == UI.Statemachine.getDisplayedSM() 
+									if (state.getContainer() == UI.Statemachine.getDisplayedSM()
 										&& UI.Panels.StateProperties.isCurrentState(state)) {
 										UI.Panels.StateProperties.hide();
 										UI.Panels.StateProperties.displayStateProperties(state);
