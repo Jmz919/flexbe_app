@@ -94,7 +94,6 @@ rclpy.spin(node)
 	}
 
 	that.getPackagePath = function(package_name, callback) {
-		T.logInfo("Getting package path");
 		that.getPackageList((package_cache) => {
 			var package_path = undefined;
 			for (var i=0; i<package_cache.length; i++) {
@@ -108,7 +107,6 @@ rclpy.spin(node)
 	}
 
 	that.getPackagePythonPath = function(package_name, callback) {
-		T.logInfo("Getting python package path");
 		var python_path = undefined;
 		that.getPackageList((package_cache) => {
 			for (var i=0; i<package_cache.length; i++) {
@@ -149,7 +147,6 @@ rclpy.spin(node)
 	}
 
 	that.getParam = function(name, callback) {
-		T.logInfo("Getting parameter");
 		var proc = spawn('ros2', ['param', 'get', name]);
 		proc.stdout.on('data', data => {
 			proc.kill('SIGKILL');

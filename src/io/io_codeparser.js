@@ -20,7 +20,7 @@ IO.CodeParser = new (function() {
 
 		// Inherits from Behavior, meant to also split the file
 		// [1] - global indentation, [2] - class name
-	var class_def_pattern = /^(\s*)class\s+(\w+)\s*\(Behavior\):$/im;
+	var class_def_pattern = /^(\s*)class\s+(\w+)\s*\(Behavior\):/im;
 		// Finds first documentation block
 		// [1] - content of the block
 	var doc_block_pattern = /'''\n\r?([^']*)\n\r?\s*'''/i;
@@ -204,7 +204,7 @@ IO.CodeParser = new (function() {
 		// parse import statements
 		var additional_imports = "";
 		if (need_manual_imports) {
-			
+
 		}
 
 		return {
@@ -242,7 +242,7 @@ IO.CodeParser = new (function() {
 				});
 			}
 		}
-		
+
 		code = code.replace(remove_comment_pattern, "");
 
 		// parse additional init code
@@ -736,7 +736,7 @@ IO.CodeParser = new (function() {
 		}
 
 		return result;
-	} 
+	}
 
 
 	var helper_removeQuotes = function(quoted_string) {

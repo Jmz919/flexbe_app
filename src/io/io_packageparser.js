@@ -28,7 +28,6 @@ IO.PackageParser = new (function() {
 			pkg_cache = pkg_cache.concat(pkg_list);
 
 			var processEntry = function(idx) {
-				T.logInfo(pkg_list[idx]);
 				var entry = pkg_list[idx];
 				if (idx >= pkg_count) {
 					callback(pkg_cache, add_states, add_behaviors);
