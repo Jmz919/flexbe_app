@@ -20,7 +20,8 @@ IO.CodeParser = new (function() {
 
 		// Inherits from Behavior, meant to also split the file
 		// [1] - global indentation, [2] - class name
-	var class_def_pattern = /^(\s*)class\s+(\w+)\s*\(Behavior\):/im;
+	var class_def_pattern = /^(\s*)class\s+(\w+)\s*\(Behavior\):$/im;
+
 		// Finds first documentation block
 		// [1] - content of the block
 	var doc_block_pattern = /'''\n\r?([^']*)\n\r?\s*'''/i;
@@ -33,7 +34,7 @@ IO.CodeParser = new (function() {
 	var behavior_author_pattern = /@author:\s*(.+)/i;
 
 		// Finds constructor definition, to split
-	var init_def_pattern = /^\s*def __init__\(self\):$/im;
+	var init_def_pattern = /^\s*def __init__\(self, node\):$/im;
 		// Finds create definition, to split
 	var create_def_pattern = /^\s*def create\(self\):$/im;
 		// Finds function definitions for private functions

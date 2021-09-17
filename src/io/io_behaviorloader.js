@@ -8,9 +8,7 @@ IO.BehaviorLoader = new (function() {
 		callback = callback || console.error;
 		var parsingResult;
 		try {
-			T.logInfo(file_content)
 			parsingResult = IO.CodeParser.parseCode(file_content);
-			T.logInfo("Code parsing completed.");
 		} catch (err) {
 			var error_string = "Code parsing failed: " + err;
 			T.logError(error_string);
