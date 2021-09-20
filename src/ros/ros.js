@@ -84,6 +84,7 @@ rclpy.spin(node)
 						packages.push(package)
 					}
 				}
+				package_cache = packages.clone()
 				callback(packages.clone());
 			});
 		} else {
@@ -97,7 +98,9 @@ rclpy.spin(node)
 		that.getPackageList((package_cache) => {
 			var package_path = undefined;
 			for (var i=0; i<package_cache.length; i++) {
+				T.logInfo(package_cache[i]['name'])
 				if (package_cache[i]['name'] == package_name) {
+					T.logInfo(package_cache[i]['path'])
 					package_path = package_cache[i]['path'];
 					break;
 				}

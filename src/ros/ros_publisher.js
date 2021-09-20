@@ -10,6 +10,7 @@ ROS.Publisher = function(topic, msg_type, latched=false) {
 // BEGIN Python implementation
 	var impl = `
 import rclpy
+import os
 import sys
 import importlib
 import json
@@ -35,6 +36,7 @@ while rclpy.ok():
 	try:
 		msg_dict = json.loads(json_str)
 		msg = msg_class()
+		
 		genpy.message.fill_message_args(msg, [msg_dict])
 		pub.publish(msg)
 	except Exception as e:
