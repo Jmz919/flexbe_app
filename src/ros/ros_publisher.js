@@ -15,7 +15,9 @@ import sys
 import importlib
 import json
 import genpy
+import flexbe_core.message
 import yaml
+from rosidl_parser.definition import Message
 
 topic = sys.argv[1]
 msg_def = sys.argv[2].split('/')
@@ -35,9 +37,11 @@ while rclpy.ok():
 	json_str = sys.stdin.readline()
 	try:
 		msg_dict = json.loads(json_str)
+		sys.stderr.write("Msg dict = " + str(msg_dict))
 		msg = msg_class()
-		
-		genpy.message.fill_message_args(msg, [msg_dict])
+
+		flexbe_core.message.fill_message_args(msg, msg_dict)
+
 		pub.publish(msg)
 	except Exception as e:
 		if json_str != '':

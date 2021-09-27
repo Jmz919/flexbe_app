@@ -20,6 +20,7 @@ import sys
 import importlib
 import json
 import genpy
+import flexbe_core.message
 import yaml
 
 def feedback_cb(msg):
@@ -63,7 +64,7 @@ while rclpy.ok():
 	try:
 		msg_dict = json.loads(json_str)
 		msg = msg_goal_class()
-		genpy.message.fill_message_args(msg, [msg_dict])
+		flexbe_core.message.fill_message_args(msg, msg_dict)
 
 		client.wait_for_server()
 		future = client.send_goal_async(msg, feedback_callback=feedback_cb)

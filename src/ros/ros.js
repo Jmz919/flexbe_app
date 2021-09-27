@@ -22,6 +22,26 @@ sys.stdout.flush()
 
 rclpy.spin(node)
 	`;
+
+// 	var get_package_paths = `
+// import subprocess
+// import os
+// import sys
+// import json
+//
+// pkg_list = subprocess.check_output(["ros2", "pkg", "list"]).decode('utf-8')
+// packages = []
+//
+// pkg_list.split(${new_line})
+//
+// for pkg in pkg_list:
+// 	path = subprocess.check_output(["ros2", "pkg", "prefix", pkg]).decode('utf-8')
+// 	if path != "/opt/ros/foxy":
+// 		package = {'name': pkg, 'path': path, 'python_path': None}
+// 		packages.push(package)
+//
+// sys.stdout.write(json.dumps(packages))
+// 	`;
 // END Python implementation
 //////////////////////////////
 
@@ -63,6 +83,30 @@ rclpy.spin(node)
 	that.getPackageList = function(callback) {
 		if (package_cache == undefined) {
 			let packages = [];
+			// var get_pkg = undefined;
+			//
+			// get_pkg = spawn(python, ['-c', get_package_paths])
+			//
+			// get_pkg.stdout.on('pkgs', pkgs => {
+			// 	T.logInfo(pkgs);
+			// 	// packages = pkgs;
+			// });
+			// get_pkg.stderr.on('data', data => {
+			// 	T.logError(data);
+			// });
+			//
+		 	// get_pkg = exec(python + get_package_paths, function(err, stdout, stderr){
+			// 	if (err || stderr) {
+			// 		T.logError(err)
+			// 		T.logError(stderr)
+			// 	}
+			// 	T.logInfo("No error")
+			// 	T.logInfo(stdout);
+			// })
+			//
+			// T.logInfo(packages)
+			// callback.clone(packages.clone());
+			//
 			var proc = spawn('ros2', ['pkg', 'list']);
 
 			var pkg_data = '';
@@ -98,9 +142,7 @@ rclpy.spin(node)
 		that.getPackageList((package_cache) => {
 			var package_path = undefined;
 			for (var i=0; i<package_cache.length; i++) {
-				T.logInfo(package_cache[i]['name'])
 				if (package_cache[i]['name'] == package_name) {
-					T.logInfo(package_cache[i]['path'])
 					package_path = package_cache[i]['path'];
 					break;
 				}
