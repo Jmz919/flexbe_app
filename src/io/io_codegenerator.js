@@ -48,9 +48,13 @@ IO.CodeGenerator = new (function() {
 					+ " as " + imported_states[i].getStatePackage() + "__" + imported_states[i].getStateClass());
 			}
 
-			if (!imported_states[i].getStateClass().includes("SM")) {
-					state_init_list.push(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")
-			}
+			state_init_list.push(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")
+
+			// if (!imported_states[i].getStateClass().includes("SM") &&
+			// 		!state_init_list.includes(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")) {
+			//
+			// 		state_init_list.push(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")
+			// }
 		}
 		// put together
 		code += "from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger\n";
@@ -111,6 +115,9 @@ IO.CodeGenerator = new (function() {
 		code += ws+ws+ "Logger" + ".initialize(node)" + "\n"
 		code += state_init_list.sort().join("\n");
 		code += "\n";
+
+		// Need to clear state_init_list in case of saving multiple times
+		state_init_list = []
 
 
 		var contained_behaviors = [];
