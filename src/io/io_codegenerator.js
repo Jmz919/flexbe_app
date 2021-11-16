@@ -48,13 +48,11 @@ IO.CodeGenerator = new (function() {
 					+ " as " + imported_states[i].getStatePackage() + "__" + imported_states[i].getStateClass());
 			}
 
-			state_init_list.push(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")
+			if (!imported_states[i].getStateClass().includes("SM") &&
+					!state_init_list.includes(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")) {
 
-			// if (!imported_states[i].getStateClass().includes("SM") &&
-			// 		!state_init_list.includes(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")) {
-			//
-			// 		state_init_list.push(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")
-			// }
+					state_init_list.push(ws + ws + imported_states[i].getStateClass() + ".initialize_ros(node)")
+			}
 		}
 		// put together
 		code += "from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger\n";
