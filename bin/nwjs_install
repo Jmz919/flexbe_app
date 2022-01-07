@@ -39,7 +39,7 @@ echo "Downloading nwjs..."
 curl -s -o $TEMPFILE https://dl.nwjs.io/$VERSION/nwjs-$VERSION-$OS-$ARCH.tar.gz
 
 echo "Unpacking..."
-tar -xzf $TEMPFILE --strip-components 1
+tar -xvf $TEMPFILE --strip-components 1
 rm $TEMPFILE
 echo "$VERSION" > version
 
